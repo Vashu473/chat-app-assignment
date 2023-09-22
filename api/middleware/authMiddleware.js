@@ -13,9 +13,8 @@ const protect = asyncHandler(async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
 
       //decodes token id
-      // for your real project use .env file for secretes
       const decoded = jwt.verify(token, "process.env.JWT_SECRET");
-      console.log("veri", decoded);
+
       req.user = await User.findById(decoded.id).select("-password");
 
       next();
