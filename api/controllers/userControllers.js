@@ -18,6 +18,23 @@ const allUsers = asyncHandler(async (req, res) => {
   const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
   res.send(users);
 });
+//@description     Get all users
+//@route           GET /api/user/all
+//@access          Public
+const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({}, { name: 1, email: 1, _id: 1 });
+  res.send(users);
+});
+
+//@description     Edit user
+//@route           GET /api/user/edit
+//@access          Public
+const edituser = asyncHandler(async (req, res) => {
+  let id = req.params.id;
+  console.log(req.body, id);
+  const user = await User.findByIdAndUpdate(id, req.body);
+  res.send(user);
+});
 
 //@description     Register new user
 //@route           POST /api/user/
@@ -81,4 +98,4 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { allUsers, registerUser, authUser };
+module.exports = { allUsers, registerUser, authUser, getAllUsers, edituser };

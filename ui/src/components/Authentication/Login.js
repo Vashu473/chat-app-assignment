@@ -2,18 +2,21 @@ import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import { ChatState } from "../../Context/ChatProvider";
 
 const Login = () => {
+  useEffect(() => {
+    alert("Admin details already filled, Just click on login");
+  }, []);
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const toast = useToast();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("test@gmail.com");
+  const [password, setPassword] = useState("test");
   const [loading, setLoading] = useState(false);
 
   const history = useHistory();

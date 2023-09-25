@@ -6,6 +6,7 @@ const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const path = require("path");
+const User = require("./models/userModel");
 
 dotenv.config();
 connectDB();
@@ -23,10 +24,18 @@ app.use(errorHandler);
 
 const PORT = 80;
 
-const server = app.listen(
-  PORT,
-  console.log(`Server running on PORT ${PORT}...`.yellow.bold)
-);
+const server = app.listen(PORT, async () => {
+  let users = await User.find({});
+  if (!users.length) {
+    await User.create({
+      name: "test",
+      email: "test@gmail.com",
+      password: "test",
+      isAdmin: true,
+    });
+  }
+  console.log(`Server running on PORT ${PORT}...`.yellow.bold);
+});
 
 const io = require("socket.io")(server, {
   pingTimeout: 60000,

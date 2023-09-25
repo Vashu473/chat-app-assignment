@@ -7,17 +7,17 @@ import axios from "axios";
 import { useState } from "react";
 import { useHistory } from "react-router";
 
-const Signup = () => {
+const Signup = ({ mode, id = "" }) => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const toast = useToast();
   const history = useHistory();
 
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [confirmpassword, setConfirmpassword] = useState();
-  const [password, setPassword] = useState();
-  const [pic, setPic] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [confirmpassword, setConfirmpassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [pic, setPic] = useState("");
   const [picLoading, setPicLoading] = useState(false);
 
   const submitHandler = async () => {
@@ -81,6 +81,47 @@ const Signup = () => {
         position: "bottom",
       });
       setPicLoading(false);
+    }
+  };
+
+  const submitEditHandler = async () => {
+    try {
+      let user = {};
+      if (name.trim().length) {
+        user.name = name;
+      }
+      if (email.trim().length) {
+        user.email = email;
+      }
+      if (password.trim().length) {
+        user.password = password;
+      }
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      const { data } = await axios.post(`/api/user/edit/${id}`, user, config);
+      console.log(data);
+      toast({
+        title: "User Edited Successful",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+
+      history.push("/chats");
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error Occured!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
     }
   };
 
@@ -161,38 +202,43 @@ const Signup = () => {
           </InputRightElement>
         </InputGroup>
       </FormControl>
-      <FormControl id="password" isRequired>
-        <FormLabel>Confirm Password</FormLabel>
-        <InputGroup size="md">
+      {mode == "add" && (
+        <FormControl id="password" isRequired>
+          <FormLabel>Confirm Password</FormLabel>
+          <InputGroup size="md">
+            <Input
+              type={show ? "text" : "password"}
+              placeholder="Confirm password"
+              onChange={(e) => setConfirmpassword(e.target.value)}
+            />
+            <InputRightElement width="4.5rem">
+              <Button h="1.75rem" size="sm" onClick={handleClick}>
+                {show ? "Hide" : "Show"}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
+      )}
+
+      {mode == "add" && (
+        <FormControl id="pic">
+          <FormLabel>Upload your Picture</FormLabel>
           <Input
-            type={show ? "text" : "password"}
-            placeholder="Confirm password"
-            onChange={(e) => setConfirmpassword(e.target.value)}
+            type="file"
+            p={1.5}
+            accept="image/*"
+            onChange={(e) => postDetails(e.target.files[0])}
           />
-          <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
-              {show ? "Hide" : "Show"}
-            </Button>
-          </InputRightElement>
-        </InputGroup>
-      </FormControl>
-      <FormControl id="pic">
-        <FormLabel>Upload your Picture</FormLabel>
-        <Input
-          type="file"
-          p={1.5}
-          accept="image/*"
-          onChange={(e) => postDetails(e.target.files[0])}
-        />
-      </FormControl>
+        </FormControl>
+      )}
       <Button
         colorScheme="blue"
         width="100%"
         style={{ marginTop: 15 }}
-        onClick={submitHandler}
+        onClick={mode == "add" ? submitHandler : submitEditHandler}
         isLoading={picLoading}
       >
-        Sign Up
+        {mode == "add" ? "Add User" : "Edit User"}
       </Button>
     </VStack>
   );

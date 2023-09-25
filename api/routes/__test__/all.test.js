@@ -1,10 +1,10 @@
 // Import necessary modules and other dependencies here
 const request = require("supertest");
-const app = require("../server");
+const app = require("../../server");
 
 const testUserData = {
-  email: "test@example.com",
-  password: "testpassword",
+  email: "test@gmail.com",
+  password: "test",
 };
 
 let authToken;
@@ -21,16 +21,15 @@ beforeAll(async () => {
 
 // userRoutes.test.js
 describe("User Routes", () => {
-  it("should register a new user", async () => {
+  it("should login a user", async () => {
     const response = await request(app)
-      .post("/api/user")
+      .post("/api/user/login")
       .send({
-        name: "New User",
-        email: `newuser@example${Math.random()}.com`,
-        password: "newpassword",
+        name: "test",
+        email: `test@gmail.com`,
+        password: "test",
       })
-      .expect(201);
-
+      .expect(200);
     expect(response.body).toHaveProperty("token");
   });
 

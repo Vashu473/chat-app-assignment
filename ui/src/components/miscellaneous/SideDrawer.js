@@ -142,7 +142,7 @@ function SideDrawer() {
           </Button>
         </Tooltip>
         <Text fontSize="2xl" fontFamily="Work sans">
-          Talk-A-Tive
+          My Chat App
         </Text>
         <div>
           <Menu>
@@ -153,6 +153,22 @@ function SideDrawer() {
               />
               <BellIcon fontSize="2xl" m={1} />
             </MenuButton>
+            {user && user.isAdmin ? (
+              <>
+                <button onClick={() => history.push("/user", { state: "add" })}>
+                  Add user
+                </button>{" "}
+                ||{" "}
+                <button
+                  onClick={() => history.push("/user", { state: "alluser" })}
+                >
+                  Edit user
+                </button>
+              </>
+            ) : (
+              ""
+            )}
+
             <MenuList pl={2}>
               {!notification.length && "No New Messages"}
               {notification.map((notif) => (

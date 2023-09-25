@@ -1,18 +1,12 @@
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
-const testUserData = {
-  name: "Test User",
-  email: "test@example.com",
-  password: "testpassword",
-};
 let mongo;
 
 beforeAll(async () => {
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
   await mongoose.connect(mongoUri, {});
-  await request(app).post("/api/user").send(testUserData).expect(201);
 });
 
 beforeEach(async () => {
@@ -24,7 +18,7 @@ beforeEach(async () => {
 
 afterAll(async () => {
   if (mongo) {
-    mongo.stop;
+    await mongo.stop(); // Use await to stop the in-memory MongoDB server
   }
   mongoose.connection.close();
 });
