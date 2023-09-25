@@ -16,7 +16,7 @@ import io from "socket.io-client";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
 // if you need local then put this url in proxy in package.json also http://localhost:80"
-const ENDPOINT = "https://chat-api-tv6f.onrender.com/"; // "https://chat-api-tv6f.onrender.com/ || http://localhost:80";
+const ENDPOINT = "http://localhost:80/"; // "https://chat-api-tv6f.onrender.com/ || http://localhost:80";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
