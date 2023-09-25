@@ -3,7 +3,6 @@ const colors = require("colors");
 
 const connectDB = async () => {
   try {
-    // use .env for secretes url
     const conn = await mongoose.connect(
       "mongodb+srv://vmanishkumar04:vashudev@cluster0.8n7bdot.mongodb.net/?retryWrites=true&w=majority",
       {
